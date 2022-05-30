@@ -1,0 +1,15 @@
+#include "\masm32\include\resource.h"
+
+#include "main.rc"
+#include "about.rc"
+#include "cryptoscan.rc"
+#include "controlenable.rc"
+#include "calculator.rc"
+#include "memo.rc"
+#include "bruteforce.rc"
+#include "hashmodify.rc"
+#include "menus.rc"
+
+RANGE RGN "resources\Data_1.bin"
+169 CURSOR "resources\Cursor_1.cur"
+100 ICON "resources\Icon_1.ico"

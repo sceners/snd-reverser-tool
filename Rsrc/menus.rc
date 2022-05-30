@@ -1,0 +1,163 @@
+
+STRINGTABLE
+BEGIN
+	400,	"Key used for the Encryption functions eg; String XOR"
+	404, 	"The input to use with the function"
+	405, 	"The result of the selected function."
+	406, 	"Compute the selected function"
+	407, 	"Copy the Output text onto Clipboard"
+	408, 	"Exit the application."
+	409, 	"View the About information."
+	410, 	"Swap Output and Input text around"
+	411, 	"Exit the application"
+	412,	"Clear the Input and Output texts"
+	413,	"Minimize the application"
+	420,	"Select the function which you want to compute"
+	//600,	"Displays some information about the function"
+	//601,	"Update the Output on keypress of input"
+	//602,	"Use the Input text as hex values (length must be multiple of 2!)"
+
+	510,	"Stay on Top"
+	520,	"Minimize to Tray"
+	
+	152, 	"Color Schemes"
+	531, 		"Grey and Orange"
+	532, 		"White and Blue"
+	533, 		"Navy Blue"
+	534, 		"Deep Red"
+	535,		"Windows Colors"
+
+	550,	"Crypto Scanner"	
+	551,	"Disbled Control Enabler"
+	552,	"512-bit Calculator"
+	553,	"Memo Pad Tool"
+	554,	"Hash Brute Forcer"
+	555,	"Hash Modifier"
+
+	601,	"-------- Quick Options --------"
+
+	158,	"Auto Strip From Input..."
+	641,		"...Nothing"
+	642,		"...Spaces"
+	643,		"...Non Hex Chars (0->F)"
+	644,		"...Non Alpha Numeric Chars"
+
+	154,	"Input + Output Options"
+	611,		"Read Input as Hex"
+	612,		"Read Key as Hex"
+	613,		"Display Output as Hex"
+	614,		"Display Output in Uppercase"
+	615,		"Display Output if Unicode"
+
+
+	155,	"Encryption Options"
+	621,		"Bswap Input"
+	622,		"Bswap Key"
+	623,		"Pad Input"
+
+	156,	"Encryption Mode"
+	631,		"Electronic Codebook (ECB)"
+	632,		"Cipher-Block Chaining (CBC)"	
+
+END
+
+
+150 MENU DISCARDABLE
+BEGIN
+POPUP ""
+	BEGIN
+		MENUITEM "MemoPad", 553
+		MENUITEM "CryptoScan", 550
+		MENUITEM "WindowEnum", 551
+		MENUITEM "Calc", 552
+		MENUITEM "HashBrute", 554
+		MENUITEM "HashMod", 555
+	END
+END
+
+151 MENU
+BEGIN
+	POPUP ""
+	BEGIN
+		MENUITEM "OnTop", 510
+		MENUITEM "MinTray", 520	    
+	END
+END
+
+
+152 MENU DISCARDABLE
+BEGIN
+POPUP "Color Schemes"
+	BEGIN
+		MENUITEM "GrOr", 531
+		MENUITEM "WhBl", 532
+		MENUITEM "NBlue", 533
+		MENUITEM "DRed", 534
+		MENUITEM "Win", 535
+	END
+END
+
+
+153 MENU DISCARDABLE
+BEGIN
+POPUP ""
+	BEGIN
+		MENUITEM "Quick", 601
+	END
+END
+
+
+158 MENU DISCARDABLE
+BEGIN
+POPUP "AutoStrip"
+	BEGIN
+		MENUITEM "Nothing", 641
+		MENUITEM "Spaces", 642
+		MENUITEM "NonHex", 643
+		MENUITEM "NonAlpha", 644
+	END
+END
+
+
+154 MENU DISCARDABLE
+BEGIN
+POPUP "InOutOpts"
+	BEGIN
+		MENUITEM "RIAH", 611
+		MENUITEM "RKAH", 612
+		MENUITEM "DOAH", 613
+		MENUITEM "DOUP", 614
+		MENUITEM "DOIF", 615
+	END
+END
+
+
+155 MENU DISCARDABLE
+BEGIN
+POPUP "EncOpts"
+	BEGIN
+		MENUITEM "BSI", 621
+		MENUITEM "BSK", 622
+		MENUITEM "PI", 623
+	END
+END
+
+
+156 MENU DISCARDABLE
+BEGIN
+POPUP "EncMode"
+	BEGIN
+		MENUITEM "ECB", 631
+		MENUITEM "CBC", 632
+	END
+END
+
+
+157 MENU DISCARDABLE
+BEGIN
+POPUP ""
+	BEGIN
+		MENUITEM "Restore", 690
+		MENUITEM "Exit", 691
+	END
+END

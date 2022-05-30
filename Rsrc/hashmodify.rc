@@ -1,0 +1,255 @@
+
+#define DialogHeight					400
+#define DialogWidth						305
+#define TextLeftIndent					5
+#define TextVerticalIndentSingle		3
+#define TextVerticalIndentDouble		9
+#define TextVerticalIndentQuad			25
+#define TextVerticalIndentQuint			30
+#define Separater						5
+#define TextWidth						40
+#define TextHeight						10
+#define BoxWidthDWORD					45
+#define BoxHeight						12
+#define Column1LeftIndent				TextLeftIndent + TextWidth + Separater
+#define Column2LeftIndent				Column1LeftIndent + BoxWidthDWORD + Separater
+#define Column3LeftIndent				Column2LeftIndent + BoxWidthDWORD + Separater
+#define Column4LeftIndent				Column3LeftIndent + BoxWidthDWORD + Separater
+#define Column5LeftIndent				Column4LeftIndent + BoxWidthDWORD + Separater
+#define Vertical_Gap_Different_Hashes	20
+#define Vertical_Gap_Same_Hash			15
+#define StartRowVerticalOffset			20
+//Start Page 1
+#define ADLER32Row1VerticalOffset		StartRowVerticalOffset
+#define CRC16Row1VerticalOffset			StartRowVerticalOffset
+#define CRC16CCITTRow1VerticalOffset	StartRowVerticalOffset
+#define CRC32Row1VerticalOffset			CRC16Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define CRC32bRow1VerticalOffset		CRC16Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define GOSTRow1VerticalOffset			CRC32Row1VerticalOffset + Vertical_Gap_Different_Hashes
+#define GOSTRow2VerticalOffset			GOSTRow1VerticalOffset + Vertical_Gap_Same_Hash
+#define HAVALRow1VerticalOffset			GOSTRow2VerticalOffset + Vertical_Gap_Different_Hashes
+#define HAVALRow2VerticalOffset			HAVALRow1VerticalOffset + Vertical_Gap_Same_Hash
+#define MD4RowVerticalOffset			HAVALRow2VerticalOffset + Vertical_Gap_Different_Hashes
+#define MD5RowVerticalOffset			MD4RowVerticalOffset + Vertical_Gap_Different_Hashes
+#define PANAMARow1VerticalOffset		MD5RowVerticalOffset + Vertical_Gap_Different_Hashes
+#define PANAMARow2VerticalOffset		PANAMARow1VerticalOffset + Vertical_Gap_Same_Hash
+#define RIPE128RowVerticalOffset		PANAMARow2VerticalOffset + Vertical_Gap_Different_Hashes
+#define RIPE160RowVerticalOffset		RIPE128RowVerticalOffset + Vertical_Gap_Different_Hashes
+#define RIPE256Row1VerticalOffset		RIPE160RowVerticalOffset + Vertical_Gap_Different_Hashes
+#define RIPE256Row2VerticalOffset		RIPE256Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define RIPE320Row1VerticalOffset		RIPE256Row2VerticalOffset + Vertical_Gap_Different_Hashes
+#define RIPE320Row2VerticalOffset		RIPE320Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA0RowVerticalOffset			RIPE320Row2VerticalOffset + Vertical_Gap_Different_Hashes
+#define SHA1RowVerticalOffset			SHA0RowVerticalOffset + Vertical_Gap_Different_Hashes
+//Start Page 2
+#define SHA256Row1VerticalOffset		StartRowVerticalOffset
+#define SHA256Row2VerticalOffset		SHA256Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA384Row1VerticalOffset		SHA256Row2VerticalOffset + Vertical_Gap_Different_Hashes
+#define SHA384Row2VerticalOffset		SHA384Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA384Row3VerticalOffset		SHA384Row2VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA384Row4VerticalOffset		SHA384Row3VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA512Row1VerticalOffset		SHA384Row4VerticalOffset + Vertical_Gap_Different_Hashes
+#define SHA512Row2VerticalOffset		SHA512Row1VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA512Row3VerticalOffset		SHA512Row2VerticalOffset + Vertical_Gap_Same_Hash
+#define SHA512Row4VerticalOffset		SHA512Row3VerticalOffset + Vertical_Gap_Same_Hash
+#define SNEFRURow1VerticalOffset		SHA512Row4VerticalOffset + Vertical_Gap_Different_Hashes
+#define SNEFRURow2VerticalOffset		SNEFRURow1VerticalOffset + Vertical_Gap_Same_Hash
+#define TIGERRow1VerticalOffset			SNEFRURow2VerticalOffset + Vertical_Gap_Different_Hashes
+#define TIGERRow2VerticalOffset			TIGERRow1VerticalOffset + Vertical_Gap_Same_Hash
+#define WHIRLPOOLRow1VerticalOffset		TIGERRow2VerticalOffset + Vertical_Gap_Different_Hashes
+#define WHIRLPOOLRow2VerticalOffset		WHIRLPOOLRow1VerticalOffset + Vertical_Gap_Same_Hash
+#define WHIRLPOOLRow3VerticalOffset		WHIRLPOOLRow2VerticalOffset + Vertical_Gap_Same_Hash
+#define WHIRLPOOLRow4VerticalOffset		WHIRLPOOLRow3VerticalOffset + Vertical_Gap_Same_Hash
+#define WHIRLPOOLRow5VerticalOffset		WHIRLPOOLRow4VerticalOffset + Vertical_Gap_Same_Hash
+
+
+
+208  DIALOGEX 0, 0, DialogWidth, DialogHeight
+//STYLE DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_SYSMENU
+STYLE 0x90000800
+EXSTYLE 0x00000000
+FONT 8, "TAHOMA"
+BEGIN
+	CONTROL "", -1, STATIC, SS_BLACKFRAME | WS_CHILD | WS_VISIBLE, 0, 0, DialogWidth, DialogHeight
+	CONTROL "X", 101, BUTTON, BS_OWNERDRAW | BS_CENTER | WS_CHILD | WS_VISIBLE, DialogWidth-15, 2, 12, 10
+	CONTROL "ADLER32:", 396, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, ADLER32Row1VerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 196, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, ADLER32Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "CRC16:", 397, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, Column2LeftIndent+10, CRC16Row1VerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 197, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, CRC16Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "CRC16citt:", 398, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, Column4LeftIndent+10, CRC16CCITTRow1VerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 198, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column5LeftIndent, CRC16CCITTRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "CRC32:", 399, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, CRC32Row1VerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 199, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, CRC32Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "CRC32b:", 400, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, Column2LeftIndent+10, CRC32bRow1VerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 200, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, CRC32bRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "GOST:", 401, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, GOSTRow1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 201, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, GOSTRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 202, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, GOSTRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 203, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, GOSTRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 204, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, GOSTRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 205, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, GOSTRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 206, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, GOSTRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 207, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, GOSTRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 208, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, GOSTRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "HAVAL (All):", 402, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, HAVALRow1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 209, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, HAVALRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 210, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, HAVALRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 211, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, HAVALRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 212, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, HAVALRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 213, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, HAVALRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 214, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, HAVALRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 215, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, HAVALRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 216, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, HAVALRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "MD4:", 403, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, MD4RowVerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 217, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, MD4RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 218, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, MD4RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 219, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, MD4RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 220, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, MD4RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "MD5:", 404, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, MD5RowVerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 221, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, MD5RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 222, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, MD5RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 223, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, MD5RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 224, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, MD5RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "PANAMA:", 405, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, PANAMARow1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 225, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, PANAMARow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 226, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, PANAMARow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 227, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, PANAMARow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 228, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, PANAMARow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 229, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, PANAMARow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 230, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, PANAMARow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 231, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, PANAMARow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 232, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, PANAMARow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "RIPEMD128:", 406, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, RIPE128RowVerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 233, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, RIPE128RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 234, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, RIPE128RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 235, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, RIPE128RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 236, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, RIPE128RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "RIPEMD160:", 407, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, RIPE160RowVerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 237, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, RIPE160RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 238, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, RIPE160RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 239, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, RIPE160RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 240, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, RIPE160RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 241, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column5LeftIndent, RIPE160RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "RIPEMD256:", 408, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, RIPE256Row1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 242, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, RIPE256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 243, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, RIPE256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 244, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, RIPE256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 245, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, RIPE256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 246, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, RIPE256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 247, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, RIPE256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 248, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, RIPE256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 249, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, RIPE256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "RIPEMD320:", 409, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, RIPE320Row1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 250, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, RIPE320Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 251, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, RIPE320Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 252, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, RIPE320Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 253, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, RIPE320Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 254, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column5LeftIndent, RIPE320Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 255, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, RIPE320Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 256, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, RIPE320Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 257, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, RIPE320Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 258, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, RIPE320Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 259, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column5LeftIndent, RIPE320Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "SHA0:", 410, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, SHA0RowVerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 260, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA0RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 261, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA0RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 262, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA0RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 263, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA0RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 264, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column5LeftIndent, SHA0RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "SHA1:", 411, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, SHA1RowVerticalOffset+TextVerticalIndentSingle, TextWidth, TextHeight
+	CONTROL "", 265, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA1RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 266, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA1RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 267, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA1RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 268, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA1RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 269, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column5LeftIndent, SHA1RowVerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	
+	//Start Page 2
+	CONTROL "SHA256:", 412, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, SHA256Row1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 270, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 271, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 272, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 273, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA256Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 274, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 275, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 276, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 277, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA256Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "SHA384:", 413, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, SHA384Row1VerticalOffset+TextVerticalIndentQuad, TextWidth, TextHeight
+	CONTROL "", 278, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA384Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 279, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA384Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 280, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA384Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 281, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA384Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 282, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA384Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 283, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA384Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 284, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA384Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 285, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA384Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 286, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA384Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 287, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA384Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 288, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA384Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 289, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA384Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 290, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA384Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 291, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA384Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 292, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA384Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 293, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA384Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "SHA512:", 414, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, SHA512Row1VerticalOffset+TextVerticalIndentQuad, TextWidth, TextHeight
+	CONTROL "", 294, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA512Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 295, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA512Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 296, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA512Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 297, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA512Row1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 298, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA512Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 299, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA512Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 300, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA512Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 301, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA512Row2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 302, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA512Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 303, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA512Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 304, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA512Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 305, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA512Row3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 306, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SHA512Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 307, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SHA512Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 308, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SHA512Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 309, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SHA512Row4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "SNEFRU:", 415, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, SNEFRURow1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 310, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SNEFRURow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 311, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SNEFRURow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 312, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SNEFRURow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 313, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SNEFRURow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 314, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, SNEFRURow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 315, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, SNEFRURow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 316, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, SNEFRURow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 317, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, SNEFRURow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "TIGER:", 416, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, TIGERRow1VerticalOffset+TextVerticalIndentDouble, TextWidth, TextHeight
+	CONTROL "", 318, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, TIGERRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 319, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, TIGERRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 320, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, TIGERRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 321, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, TIGERRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 322, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, TIGERRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 323, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, TIGERRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "WHIRLPOOL:", 417, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, WHIRLPOOLRow1VerticalOffset+TextVerticalIndentQuint, TextWidth, TextHeight
+	CONTROL "", 324, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, WHIRLPOOLRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 325, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, WHIRLPOOLRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 326, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, WHIRLPOOLRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 327, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, WHIRLPOOLRow1VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 328, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, WHIRLPOOLRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 329, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, WHIRLPOOLRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 330, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, WHIRLPOOLRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 331, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, WHIRLPOOLRow2VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 332, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, WHIRLPOOLRow3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 333, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, WHIRLPOOLRow3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 334, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, WHIRLPOOLRow3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 335, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, WHIRLPOOLRow3VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 336, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, WHIRLPOOLRow4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 337, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, WHIRLPOOLRow4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 338, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, WHIRLPOOLRow4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 339, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, WHIRLPOOLRow4VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 340, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column1LeftIndent, WHIRLPOOLRow5VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 341, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column2LeftIndent, WHIRLPOOLRow5VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 342, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column3LeftIndent, WHIRLPOOLRow5VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	CONTROL "", 343, EDIT, ES_CENTER | WS_CHILD | WS_VISIBLE, Column4LeftIndent, WHIRLPOOLRow5VerticalOffset, BoxWidthDWORD, BoxHeight, 0x00020000
+	
+	CONTROL "Status:", -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, TextLeftIndent, DialogHeight-50, 70, 10
+	CONTROL "", 502, EDIT, ES_LEFT | ES_AUTOHSCROLL | WS_CHILD | WS_VISIBLE | WS_DISABLED | WS_TABSTOP, 5, DialogHeight-40, DialogWidth-10, 12, 0x00020000
+	CONTROL "Apply", 102, BUTTON, BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 5, DialogHeight-20, 60, 14
+	CONTROL "Defaults", 103, BUTTON, BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 70, DialogHeight-20, 60, 14
+	CONTROL "Page 1", 104, BUTTON, BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, DialogWidth-65, DialogHeight-20, 60, 14
+	CONTROL "Page 2", 105, BUTTON, BS_OWNERDRAW | WS_CHILD | WS_VISIBLE | WS_TABSTOP, DialogWidth-65, DialogHeight-20, 60, 14
+	CONTROL "Basic Hash Modifier", 501, STATIC, SS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP, 75, 2, 150, 10
+END

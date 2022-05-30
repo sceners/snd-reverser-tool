@@ -1,0 +1,603 @@
+
+
+
+des_setkey PROTO :DWORD
+des_encrypt PROTO :DWORD,:DWORD
+des_decrypt PROTO :DWORD,:DWORD
+PERM_OP		macro	a,b,n,m
+
+		mov	ebp,a
+		shr	ebp,n
+		xor	ebp,b
+		and	ebp,m		; t
+		xor	b,ebp
+		shl	ebp,n
+		xor	a,ebp
+		
+endm
+
+HPERM_OP	macro	a,n,m
+
+		mov	ebp,a
+		shl	ebp,(16-n)
+		xor	ebp,a
+		and	ebp,m		; t
+		xor	a,ebp
+		shr	ebp,(16-n)
+		xor	a,ebp
+		
+endm
+
+_shifts		macro	a,b
+
+		mov	esi,eax		; c
+		shr	esi,a
+		shl	eax,b
+		or	eax,esi
+		mov	esi,ebx		; d
+		shr	esi,a
+		shl	ebx,b
+		or	ebx,esi
+		mov	_c,eax
+		mov	_d,ebx	
+		
+endm
+
+IP		macro	l,r
+
+		PERM_OP r,l,4,0f0f0f0fh
+		PERM_OP l,r,16,0000ffffh
+		PERM_OP r,l,2,33333333h
+		PERM_OP l,r,8,00ff00ffh
+		PERM_OP r,l,1,55555555h
+		
+endm
+
+FP		macro	l,r
+
+		PERM_OP l,r,1,55555555h
+		PERM_OP r,l,8,00ff00ffh
+		PERM_OP l,r,2,33333333h
+		PERM_OP r,l,16,0000ffffh
+		PERM_OP l,r,4,0f0f0f0fh
+		
+endm
+DES_ENCRYPT	macro	LL,R,S,X
+
+		mov	ebp,R
+		xor	ebp,[des_roundkey+X+S*4]	; u
+		mov	edx,R
+		xor	edx,[des_roundkey+X+S*4+4] ; t
+		ror	edx,4
+		mov	esi,ebp			; u
+		mov	edi,ebp			; u
+		mov	ecx,ebp			; u
+		shr	esi,2
+		and	esi,3fh
+		shr	edi,10
+		and	edi,3fh
+		shr	ecx,18
+		and	ecx,3fh
+		shr	ebp,26
+		and	ebp,3fh
+		xor	LL,[des_SPtrans+0*64*4+esi*4]
+		xor	LL,[des_SPtrans+2*64*4+edi*4]
+		xor	LL,[des_SPtrans+4*64*4+ecx*4]
+		xor	LL,[des_SPtrans+6*64*4+ebp*4]
+		mov	esi,edx
+		mov	edi,edx
+		mov	ecx,edx
+		shr	esi,2
+		and	esi,3fh
+		shr	edi,10
+		and	edi,3fh
+		shr	ecx,18
+		and	ecx,3fh
+		shr	edx,26
+		and	edx,3fh
+		xor	LL,[des_SPtrans+1*64*4+esi*4]
+		xor	LL,[des_SPtrans+3*64*4+edi*4]
+		xor	LL,[des_SPtrans+5*64*4+ecx*4]
+		xor	LL,[des_SPtrans+7*64*4+edx*4]
+		
+endm
+
+.const
+
+DES_NO_ROUNDS	equ	16
+DES_NO_ROUNDKEY	equ	(2*DES_NO_ROUNDS)
+
+.data?
+
+des_roundkey	dd	DES_NO_ROUNDKEY		dup(?)
+_c		dd	?
+_d		dd	?
+
+
+.data
+shifts2		dd	0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0
+
+des_skb	dd	000000000h, 000000010h, 020000000h, 020000010h, 000010000h, 000010010h, 020010000h, 020010010h
+	dd	000000800h, 000000810h, 020000800h, 020000810h, 000010800h, 000010810h, 020010800h, 020010810h
+	dd	000000020h, 000000030h, 020000020h, 020000030h, 000010020h, 000010030h, 020010020h, 020010030h
+	dd	000000820h, 000000830h, 020000820h, 020000830h, 000010820h, 000010830h, 020010820h, 020010830h
+	dd	000080000h, 000080010h, 020080000h, 020080010h, 000090000h, 000090010h, 020090000h, 020090010h
+	dd	000080800h, 000080810h, 020080800h, 020080810h, 000090800h, 000090810h, 020090800h, 020090810h
+	dd	000080020h, 000080030h, 020080020h, 020080030h, 000090020h, 000090030h, 020090020h, 020090030h
+	dd	000080820h, 000080830h, 020080820h, 020080830h, 000090820h, 000090830h, 020090820h, 020090830h
+	
+	dd	000000000h, 002000000h, 000002000h, 002002000h, 000200000h, 002200000h, 000202000h, 002202000h
+	dd	000000004h, 002000004h, 000002004h, 002002004h, 000200004h, 002200004h, 000202004h, 002202004h
+	dd	000000400h, 002000400h, 000002400h, 002002400h, 000200400h, 002200400h, 000202400h, 002202400h
+	dd	000000404h, 002000404h, 000002404h, 002002404h, 000200404h, 002200404h, 000202404h, 002202404h
+	dd	010000000h, 012000000h, 010002000h, 012002000h, 010200000h, 012200000h, 010202000h, 012202000h
+	dd	010000004h, 012000004h, 010002004h, 012002004h, 010200004h, 012200004h, 010202004h, 012202004h
+	dd	010000400h, 012000400h, 010002400h, 012002400h, 010200400h, 012200400h, 010202400h, 012202400h
+	dd	010000404h, 012000404h, 010002404h, 012002404h, 010200404h, 012200404h, 010202404h, 012202404h
+	
+	dd 	000000000h, 000000001h, 000040000h, 000040001h, 001000000h, 001000001h, 001040000h, 001040001h
+	dd	000000002h, 000000003h, 000040002h, 000040003h, 001000002h, 001000003h, 001040002h, 001040003h
+	dd	000000200h, 000000201h, 000040200h, 000040201h, 001000200h, 001000201h, 001040200h, 001040201h
+	dd	000000202h, 000000203h, 000040202h, 000040203h, 001000202h, 001000203h, 001040202h, 001040203h
+	dd	008000000h, 008000001h, 008040000h, 008040001h, 009000000h, 009000001h, 009040000h, 009040001h
+	dd	008000002h, 008000003h, 008040002h, 008040003h, 009000002h, 009000003h, 009040002h, 009040003h
+	dd	008000200h, 008000201h, 008040200h, 008040201h, 009000200h, 009000201h, 009040200h, 009040201h
+	dd	008000202h, 008000203h, 008040202h, 008040203h, 009000202h, 009000203h, 009040202h, 009040203h
+		
+	dd	000000000h, 000100000h, 000000100h, 000100100h, 000000008h, 000100008h, 000000108h, 000100108h
+	dd	000001000h, 000101000h, 000001100h, 000101100h, 000001008h, 000101008h, 000001108h, 000101108h
+	dd	004000000h, 004100000h, 004000100h, 004100100h, 004000008h, 004100008h, 004000108h, 004100108h
+	dd	004001000h, 004101000h, 004001100h, 004101100h, 004001008h, 004101008h, 004001108h, 004101108h
+	dd	000020000h, 000120000h, 000020100h, 000120100h, 000020008h, 000120008h, 000020108h, 000120108h
+	dd	000021000h, 000121000h, 000021100h, 000121100h, 000021008h, 000121008h, 000021108h, 000121108h
+	dd	004020000h, 004120000h, 004020100h, 004120100h, 004020008h, 004120008h, 004020108h, 004120108h
+	dd	004021000h, 004121000h, 004021100h, 004121100h, 004021008h, 004121008h, 004021108h, 004121108h
+		
+	dd	000000000h, 010000000h, 000010000h, 010010000h, 000000004h, 010000004h, 000010004h, 010010004h
+	dd	020000000h, 030000000h, 020010000h, 030010000h, 020000004h, 030000004h, 020010004h, 030010004h
+	dd	000100000h, 010100000h, 000110000h, 010110000h, 000100004h, 010100004h, 000110004h, 010110004h
+	dd	020100000h, 030100000h, 020110000h, 030110000h, 020100004h, 030100004h, 020110004h, 030110004h
+	dd	000001000h, 010001000h, 000011000h, 010011000h, 000001004h, 010001004h, 000011004h, 010011004h
+	dd	020001000h, 030001000h, 020011000h, 030011000h, 020001004h, 030001004h, 020011004h, 030011004h
+	dd	000101000h, 010101000h, 000111000h, 010111000h, 000101004h, 010101004h, 000111004h, 010111004h
+	dd	020101000h, 030101000h, 020111000h, 030111000h, 020101004h, 030101004h, 020111004h, 030111004h
+	
+	dd	000000000h, 008000000h, 000000008h, 008000008h, 000000400h, 008000400h, 000000408h, 008000408h
+	dd	000020000h, 008020000h, 000020008h, 008020008h, 000020400h, 008020400h, 000020408h, 008020408h
+	dd	000000001h, 008000001h, 000000009h, 008000009h, 000000401h, 008000401h, 000000409h, 008000409h
+	dd	000020001h, 008020001h, 000020009h, 008020009h, 000020401h, 008020401h, 000020409h, 008020409h
+	dd	002000000h, 00A000000h, 002000008h, 00A000008h, 002000400h, 00A000400h, 002000408h, 00A000408h
+	dd	002020000h, 00A020000h, 002020008h, 00A020008h, 002020400h, 00A020400h, 002020408h, 00A020408h
+	dd	002000001h, 00A000001h, 002000009h, 00A000009h, 002000401h, 00A000401h, 002000409h, 00A000409h
+	dd	002020001h, 00A020001h, 002020009h, 00A020009h, 002020401h, 00A020401h, 002020409h, 00A020409h
+		
+	dd	000000000h, 000000100h, 000080000h, 000080100h, 001000000h, 001000100h, 001080000h, 001080100h
+	dd	000000010h, 000000110h, 000080010h, 000080110h, 001000010h, 001000110h, 001080010h, 001080110h
+	dd	000200000h, 000200100h, 000280000h, 000280100h, 001200000h, 001200100h, 001280000h, 001280100h
+	dd	000200010h, 000200110h, 000280010h, 000280110h, 001200010h, 001200110h, 001280010h, 001280110h
+	dd	000000200h, 000000300h, 000080200h, 000080300h, 001000200h, 001000300h, 001080200h, 001080300h
+	dd	000000210h, 000000310h, 000080210h, 000080310h, 001000210h, 001000310h, 001080210h, 001080310h
+	dd	000200200h, 000200300h, 000280200h, 000280300h, 001200200h, 001200300h, 001280200h, 001280300h
+	dd	000200210h, 000200310h, 000280210h, 000280310h, 001200210h, 001200310h, 001280210h, 001280310h
+		
+	dd	000000000h, 004000000h, 000040000h, 004040000h, 000000002h, 004000002h, 000040002h, 004040002h
+	dd	000002000h, 004002000h, 000042000h, 004042000h, 000002002h, 004002002h, 000042002h, 004042002h
+	dd	000000020h, 004000020h, 000040020h, 004040020h, 000000022h, 004000022h, 000040022h, 004040022h
+	dd	000002020h, 004002020h, 000042020h, 004042020h, 000002022h, 004002022h, 000042022h, 004042022h
+	dd	000000800h, 004000800h, 000040800h, 004040800h, 000000802h, 004000802h, 000040802h, 004040802h
+	dd	000002800h, 004002800h, 000042800h, 004042800h, 000002802h, 004002802h, 000042802h, 004042802h
+	dd	000000820h, 004000820h, 000040820h, 004040820h, 000000822h, 004000822h, 000040822h, 004040822h
+	dd	000002820h, 004002820h, 000042820h, 004042820h, 000002822h, 004002822h, 000042822h, 004042822h
+	
+des_SPtrans	dd	002080800h, 000080000h, 002000002h, 002080802h, 002000000h, 000080802h, 000080002h, 002000002h
+		dd	000080802h, 002080800h, 002080000h, 000000802h, 002000802h, 002000000h, 000000000h, 000080002h
+		dd	000080000h, 000000002h, 002000800h, 000080800h, 002080802h, 002080000h, 000000802h, 002000800h
+		dd	000000002h, 000000800h, 000080800h, 002080002h, 000000800h, 002000802h, 002080002h, 000000000h
+		dd	000000000h, 002080802h, 002000800h, 000080002h, 002080800h, 000080000h, 000000802h, 002000800h
+		dd	002080002h, 000000800h, 000080800h, 002000002h, 000080802h, 000000002h, 002000002h, 002080000h
+		dd	002080802h, 000080800h, 002080000h, 002000802h, 002000000h, 000000802h, 000080002h, 000000000h
+		dd	000080000h, 002000000h, 002000802h, 002080800h, 000000002h, 002080002h, 000000800h, 000080802h
+		
+		dd	040108010h, 000000000h, 000108000h, 040100000h, 040000010h, 000008010h, 040008000h, 000108000h
+		dd	000008000h, 040100010h, 000000010h, 040008000h, 000100010h, 040108000h, 040100000h, 000000010h
+		dd	000100000h, 040008010h, 040100010h, 000008000h, 000108010h, 040000000h, 000000000h, 000100010h
+		dd	040008010h, 000108010h, 040108000h, 040000010h, 040000000h, 000100000h, 000008010h, 040108010h
+		dd	000100010h, 040108000h, 040008000h, 000108010h, 040108010h, 000100010h, 040000010h, 000000000h
+		dd	040000000h, 000008010h, 000100000h, 040100010h, 000008000h, 040000000h, 000108010h, 040008010h
+		dd	040108000h, 000008000h, 000000000h, 040000010h, 000000010h, 040108010h, 000108000h, 040100000h
+		dd	040100010h, 000100000h, 000008010h, 040008000h, 040008010h, 000000010h, 040100000h, 000108000h
+		
+		dd   	004000001h, 004040100h, 000000100h, 004000101h, 000040001h, 004000000h, 004000101h, 000040100h
+		dd	004000100h, 000040000h, 004040000h, 000000001h, 004040101h, 000000101h, 000000001h, 004040001h
+		dd	000000000h, 000040001h, 004040100h, 000000100h, 000000101h, 004040101h, 000040000h, 004000001h
+		dd	004040001h, 004000100h, 000040101h, 004040000h, 000040100h, 000000000h, 004000000h, 000040101h
+		dd	004040100h, 000000100h, 000000001h, 000040000h, 000000101h, 000040001h, 004040000h, 004000101h
+		dd	000000000h, 004040100h, 000040100h, 004040001h, 000040001h, 004000000h, 004040101h, 000000001h
+		dd	000040101h, 004000001h, 004000000h, 004040101h, 000040000h, 004000100h, 004000101h, 000040100h
+		dd	004000100h, 000000000h, 004040001h, 000000101h, 004000001h, 000040101h, 000000100h, 004040000h
+		
+		dd	000401008h, 010001000h, 000000008h, 010401008h, 000000000h, 010400000h, 010001008h, 000400008h
+		dd	010401000h, 010000008h, 010000000h, 000001008h, 010000008h, 000401008h, 000400000h, 010000000h
+		dd	010400008h, 000401000h, 000001000h, 000000008h, 000401000h, 010001008h, 010400000h, 000001000h
+		dd	000001008h, 000000000h, 000400008h, 010401000h, 010001000h, 010400008h, 010401008h, 000400000h
+		dd	010400008h, 000001008h, 000400000h, 010000008h, 000401000h, 010001000h, 000000008h, 010400000h
+		dd	010001008h, 000000000h, 000001000h, 000400008h, 000000000h, 010400008h, 010401000h, 000001000h
+		dd	010000000h, 010401008h, 000401008h, 000400000h, 010401008h, 000000008h, 010001000h, 000401008h
+		dd	000400008h, 000401000h, 010400000h, 010001008h, 000001008h, 010000000h, 010000008h, 010401000h
+		
+		dd   	008000000h, 000010000h, 000000400h, 008010420h, 008010020h, 008000400h, 000010420h, 008010000h
+		dd	000010000h, 000000020h, 008000020h, 000010400h, 008000420h, 008010020h, 008010400h, 000000000h
+		dd	000010400h, 008000000h, 000010020h, 000000420h, 008000400h, 000010420h, 000000000h, 008000020h
+		dd	000000020h, 008000420h, 008010420h, 000010020h, 008010000h, 000000400h, 000000420h, 008010400h
+		dd	008010400h, 008000420h, 000010020h, 008010000h, 000010000h, 000000020h, 008000020h, 008000400h
+		dd	008000000h, 000010400h, 008010420h, 000000000h, 000010420h, 008000000h, 000000400h, 000010020h
+		dd	008000420h, 000000400h, 000000000h, 008010420h, 008010020h, 008010400h, 000000420h, 000010000h
+		dd	000010400h, 008010020h, 008000400h, 000000420h, 000000020h, 000010420h, 008010000h, 008000020h
+		
+		dd   	080000040h, 000200040h, 000000000h, 080202000h, 000200040h, 000002000h, 080002040h, 000200000h
+		dd	000002040h, 080202040h, 000202000h, 080000000h, 080002000h, 080000040h, 080200000h, 000202040h
+		dd	000200000h, 080002040h, 080200040h, 000000000h, 000002000h, 000000040h, 080202000h, 080200040h
+		dd	080202040h, 080200000h, 080000000h, 000002040h, 000000040h, 000202000h, 000202040h, 080002000h
+		dd	000002040h, 080000000h, 080002000h, 000202040h, 080202000h, 000200040h, 000000000h, 080002000h
+		dd	080000000h, 000002000h, 080200040h, 000200000h, 000200040h, 080202040h, 000202000h, 000000040h
+		dd	080202040h, 000202000h, 000200000h, 080002040h, 080000040h, 080200000h, 000202040h, 000000000h
+		dd	000002000h, 080000040h, 080002040h, 080202000h, 080200000h, 000002040h, 000000040h, 080200040h
+		
+		dd   	000004000h, 000000200h, 001000200h, 001000004h, 001004204h, 000004004h, 000004200h, 000000000h
+		dd	001000000h, 001000204h, 000000204h, 001004000h, 000000004h, 001004200h, 001004000h, 000000204h
+		dd	001000204h, 000004000h, 000004004h, 001004204h, 000000000h, 001000200h, 001000004h, 000004200h
+		dd	001004004h, 000004204h, 001004200h, 000000004h, 000004204h, 001004004h, 000000200h, 001000000h
+		dd	000004204h, 001004000h, 001004004h, 000000204h, 000004000h, 000000200h, 001000000h, 001004004h
+		dd	001000204h, 000004204h, 000004200h, 000000000h, 000000200h, 001000004h, 000000004h, 001000200h
+		dd	000000000h, 001000204h, 001000200h, 000004200h, 000000204h, 000004000h, 001004204h, 001000000h
+		dd	001004200h, 000000004h, 000004004h, 001004204h, 001000004h, 001004200h, 001004000h, 000004004h
+		
+		dd   	020800080h, 020820000h, 000020080h, 000000000h, 020020000h, 000800080h, 020800000h, 020820080h
+		dd	000000080h, 020000000h, 000820000h, 000020080h, 000820080h, 020020080h, 020000080h, 020800000h
+		dd	000020000h, 000820080h, 000800080h, 020020000h, 020820080h, 020000080h, 000000000h, 000820000h
+		dd	020000000h, 000800000h, 020020080h, 020800080h, 000800000h, 000020000h, 020820000h, 000000080h
+		dd	000800000h, 000020000h, 020000080h, 020820080h, 000020080h, 020000000h, 000000000h, 000820000h
+		dd	020800080h, 020020080h, 020020000h, 000800080h, 020820000h, 000000080h, 000800080h, 020020000h
+		dd	020820080h, 000800000h, 020800000h, 020000080h, 000820000h, 000020080h, 020020080h, 020800000h
+		dd	000000080h, 020820000h, 000820080h, 000000000h, 020000000h, 020800080h, 000020000h, 000820080h
+		
+
+.code
+
+
+des_setkey	proc	desInkey:DWORD
+
+		pushad
+		mov	esi,[esp+28h]	; ptrInkey
+		mov	eax,dword ptr[esi]		; c
+		mov	ebx,dword ptr[esi+4]	; d
+		.if bBswapKey
+		bswap eax
+		bswap ebx
+		.endif
+		PERM_OP ebx,eax,4,0f0f0f0fh
+		HPERM_OP eax,-2,0cccc0000h
+		HPERM_OP ebx,-2,0cccc0000h
+		PERM_OP ebx,eax,1,55555555h
+		PERM_OP eax,ebx,8,00ff00ffh
+		PERM_OP ebx,eax,1,55555555h
+		mov	ebp,ebx		; d
+		mov	edi,ebx
+		mov	esi,eax		; c
+		and	ebp,000000ffh
+		shl	ebp,16
+		and	edi,0000ff00h
+		and	ebx,00ff0000h
+		shr	ebx,16
+		and	esi,0f0000000h
+		shr	esi,4
+		or	ebx,ebp
+		or	ebx,edi
+		or	ebx,esi		; d
+		and	eax,0fffffffh	; c
+		mov	_c,eax
+		mov	_d,ebx
+		xor	ecx,ecx		; i=0
+@_r3:
+		mov	eax,_c
+		mov	ebx,_d
+		cmp	[shifts2+ecx*4],0
+		jz	@_r1
+		_shifts	2,26
+		jmp	@_r2
+@_r1:
+		_shifts	1,27	
+@_r2:
+		mov	ebp,eax
+		and	ebp,3fh
+		mov	edi,[des_skb+0*64*4+ebp*4]	; s = edi
+		mov	ebp,eax
+		mov	esi,ebp
+		shr	ebp,6
+		and	ebp,3
+		shr	esi,7
+		and	esi,3ch
+		or	ebp,esi
+		or	edi,[des_skb+1*64*4+ebp*4]
+		mov	ebp,eax
+		mov	esi,ebp
+		shr	ebp,13
+		and	ebp,0fh
+		shr	esi,14
+		and	esi,30h
+		or	ebp,esi
+		or	edi,[des_skb+2*64*4+ebp*4]
+		mov	ebp,eax
+		mov	esi,ebp
+		shr	ebp,20
+		and	ebp,1
+		shr	esi,21
+		and	esi,6
+		shr	eax,22
+		and	eax,38h
+		or	ebp,esi
+		or	ebp,eax
+		or	edi,[des_skb+3*64*4+ebp*4]	; s
+		mov	ebp,ebx
+		and	ebp,3fh
+		mov	esi,[des_skb+4*64*4+ebp*4]
+		mov	ebp,ebx
+		mov	edx,ebp
+		shr	ebp,7
+		and	ebp,3
+		shr	edx,8
+		and	edx,3ch
+		or	ebp,edx
+		or	esi,[des_skb+5*64*4+ebp*4]
+		mov	ebp,ebx
+		shr	ebp,15
+		and	ebp,3fh
+		or	esi,[des_skb+6*64*4+ebp*4]
+		mov	ebp,ebx
+		mov	edx,ebp
+		shr	ebp,21
+		and	ebp,0fh
+		shr	edx,22
+		and	edx,30h
+		or	ebp,edx
+		or	esi,[des_skb+7*64*4+ebp*4]	; t
+		mov	ebp,esi				; t
+		mov	edx,edi				; s
+		shl	ebp,16
+		and	edx,0000ffffh
+		or	ebp,edx				; t2
+		ror	ebp,30
+		mov	[des_roundkey+ecx*8],ebp
+		mov	ebp,edi
+		mov	edx,esi
+		shr	ebp,16
+		and	edx,0ffff0000h
+		or	ebp,edx
+		ror	ebp,26
+		mov	[des_roundkey+ecx*8+4],ebp
+		inc	ecx
+		cmp	ecx,DES_NO_ROUNDS
+		jl	@_r3
+		popad
+		ret
+		
+des_setkey	endp
+DES_ENC_RT proc uses esi edx ecx  _Input:dword,_Output:dword,_len:dword
+
+		call EnableKeyEdit
+		invoke lstrlen, addr sKeyIn
+
+		.IF (EAX < 1) || (EAX > 128)
+			invoke SetDlgItemText, hWindow, IDC_INFO,addr sErrorLen1128
+			invoke SetDlgItemText, hWindow, IDC_OUTPUT,NULL
+			mov eax, FALSE
+		.ELSE
+			INVOKE des_setkey,addr sKeyIn
+			invoke RtlZeroMemory,offset bf_tempbuf,sizeof bf_tempbuf-1
+		
+			mov	esi,_Input
+			mov	ebx,_len
+			;part into multiples of 8
+	EncryptLoop:
+			push	esi	;source
+			mov	eax,ebx	;length
+			
+			mov	ecx,8
+			xor	edx,edx
+			div	ecx
+			.if	eax == 0
+				mov	eax,edx
+			.else
+				mov	eax,8
+			.endif
+			push	eax
+			push	esi
+			
+			Call Bit8Prepare
+			
+			.if bCipherMode == 1
+				push	8
+				push	offset bf_encryptbuf
+				call	CipherXor
+			.endif
+			INVOKE des_encrypt,offset bf_encryptbuf,offset bf_tempbuf
+			;convert output to hex string
+			mov	eax,dword ptr[bf_tempbuf]
+			mov	edx,dword ptr[bf_tempbuf+4]
+			bswap	eax
+			bswap	edx
+
+			invoke wsprintf,addr bf_tempbufout,addr sFormat_2,eax,edx
+			invoke	lstrcat,_Output,addr bf_tempbufout
+			pop	esi
+			add	esi,8
+			sub	ebx,8
+			
+			cmp	ebx,0
+			jg	EncryptLoop
+			INVOKE lstrlen,_Output
+			HexLen
+		.ENDIF
+		ret
+DES_ENC_RT endp
+DES_DEC_RT proc uses esi edx ecx  _Input:dword,_Output:dword,_len:dword
+
+		call EnableKeyEdit
+		invoke lstrlen, addr sKeyIn
+		.IF (EAX < 1) || (EAX > 128)
+			invoke SetDlgItemText, hWindow, IDC_INFO,addr sErrorLen1128
+			invoke SetDlgItemText, hWindow, IDC_OUTPUT,NULL
+			mov eax, FALSE
+		.ELSE
+		INVOKE des_setkey,addr sKeyIn
+		mov bPassedRound,0
+		mov eax, [_len]
+		cmp eax, 2
+		jl @inputError
+		mov	ecx,16
+		xor	edx,edx
+		div	ecx
+		cmp	edx,0
+		jne	@inputError
+		invoke RtlZeroMemory,offset bf_decryptbuf,sizeof bf_decryptbuf-1
+		;convert hex to chars
+		push	_len
+		push	offset bf_decryptbuf
+		push	_Input
+		call	HEX2CHR_RT
+		mov	ebx,eax	;length
+		.if	eax != -1 ; all chars are ok
+
+		mov	esi,offset bf_decryptbuf
+		mov	edi,_Output	;destination
+		
+		;now we do similar as encryption
+	DecryptLoop:
+			push	esi	
+			push	8	;length
+			push	esi
+			call	Bit8Prepare
+			
+		
+			INVOKE des_decrypt,offset bf_encryptbuf,offset bf_tempbuf
+			DecryptEnd 8
+			mov	eax,dword ptr[esi]
+			mov	edx,dword ptr[esi+4]
+			
+			mov	dword ptr[edi+4*0],eax
+			mov	dword ptr[edi+4*1],edx
+			add	edi,8
+			pop	esi
+			add	esi,8
+			sub	ebx,8
+			
+			cmp	ebx,0
+			jg	DecryptLoop
+			;now we need to clean it up :)
+		INVOKE lstrlen,_Output
+		mov	edi,_Output
+		movzx	ebx,byte ptr[edi+eax-1];get last char
+		.if	ebx < 8	;padding chars are 1-8
+			sub	eax,ebx	;fix up length 
+			mov	byte ptr[edi+eax],0	;clear it up :)
+		.endif
+		.elseif
+		invoke SetDlgItemText, hWindow, IDC_INFO, addr sErrorMsgHex
+		mov	eax,FALSE
+		.endif
+		
+		jmp @endGenerate
+	@inputError:
+		invoke SetDlgItemText, hWindow, IDC_INFO, addr sError64b
+		mov eax, FALSE		
+	@endGenerate:
+		.ENDIF
+		ret
+DES_DEC_RT endp
+des_encrypt	proc	ptrIndata:DWORD, ptrOutdata:DWORD
+
+		pushad
+		mov	esi,[esp+28h]	; ptrIndata
+		mov	eax,dword ptr[esi]		; r
+		mov	ebx,dword ptr[esi+4]	; l
+		.if bBswapInput
+		bswap eax
+		bswap ebx
+		.endif
+		IP	eax,ebx
+		ror	eax,29
+		ror	ebx,29
+		DES_ENCRYPT          ebx,eax, 0,0
+		DES_ENCRYPT          eax,ebx, 2,0
+		DES_ENCRYPT          ebx,eax, 4,0
+		DES_ENCRYPT          eax,ebx, 6,0
+		DES_ENCRYPT          ebx,eax, 8,0
+		DES_ENCRYPT          eax,ebx,10,0
+		DES_ENCRYPT          ebx,eax,12,0
+		DES_ENCRYPT          eax,ebx,14,0
+		DES_ENCRYPT          ebx,eax,16,0
+		DES_ENCRYPT          eax,ebx,18,0
+		DES_ENCRYPT          ebx,eax,20,0
+		DES_ENCRYPT          eax,ebx,22,0
+		DES_ENCRYPT          ebx,eax,24,0
+		DES_ENCRYPT          eax,ebx,26,0
+		DES_ENCRYPT          ebx,eax,28,0
+		DES_ENCRYPT          eax,ebx,30,0
+		ror	eax,3
+		ror	ebx,3
+		FP	eax,ebx
+		mov	edi,[esp+2ch]	; ptrOutdata
+		.if bBswapInput
+		bswap eax
+		bswap ebx
+		.endif
+		mov	dword ptr[edi],ebx
+		mov	dword ptr[edi+4],eax
+		popad
+		ret
+		
+des_encrypt	endp
+
+des_decrypt	proc	ptrIndata:DWORD, ptrOutdata:DWORD
+
+		pushad
+		mov	esi,[esp+28h]	; ptrIndata
+		mov	eax,dword ptr[esi]		; r
+		mov	ebx,dword ptr[esi+4]	; l
+		.if bBswapInput
+		bswap eax
+		bswap ebx
+		.endif
+		IP	eax,ebx
+		ror	eax,29
+		ror	ebx,29
+		DES_ENCRYPT          ebx,eax,30,0
+		DES_ENCRYPT          eax,ebx,28,0
+		DES_ENCRYPT          ebx,eax,26,0
+		DES_ENCRYPT          eax,ebx,24,0
+		DES_ENCRYPT          ebx,eax,22,0
+		DES_ENCRYPT          eax,ebx,20,0
+		DES_ENCRYPT          ebx,eax,18,0
+		DES_ENCRYPT          eax,ebx,16,0
+		DES_ENCRYPT          ebx,eax,14,0
+		DES_ENCRYPT          eax,ebx,12,0
+		DES_ENCRYPT          ebx,eax,10,0
+		DES_ENCRYPT          eax,ebx, 8,0
+		DES_ENCRYPT          ebx,eax, 6,0
+		DES_ENCRYPT          eax,ebx, 4,0
+		DES_ENCRYPT          ebx,eax, 2,0
+		DES_ENCRYPT          eax,ebx, 0,0
+		ror	eax,3
+		ror	ebx,3
+		FP	eax,ebx
+		mov	edi,[esp+2ch]	; ptrOutdata
+		.if bBswapInput
+		bswap eax
+		bswap ebx
+		.endif
+		mov	dword ptr[edi],ebx
+		mov	dword ptr[edi+4],eax
+		popad
+		ret
+		
+des_decrypt	endp
